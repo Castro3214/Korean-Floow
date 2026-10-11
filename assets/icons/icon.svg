@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8F78A8" />
+      <stop offset="100%" stop-color="#6B5585" />
+    </linearGradient>
+    <linearGradient id="petalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#EDE7F3" />
+    </linearGradient>
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000000" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded rect -->
+  <rect width="512" height="512" rx="116" fill="url(#bgGrad)" />
+
+  <!-- Outer subtle gold aura -->
+  <circle cx="256" cy="256" r="170" fill="none" stroke="#C8A45D" stroke-width="3" stroke-dasharray="6 8" opacity="0.6" />
+
+  <!-- Lotus Center Flower -->
+  <g filter="url(#subtleGlow)">
+    <!-- Back central petal -->
+    <path d="M256 120 C220 180 216 260 256 320 C296 260 292 180 256 120 Z" fill="url(#petalGrad)" />
+    <!-- Left petal -->
+    <path d="M256 320 C210 320 150 270 144 210 C180 190 230 240 256 320 Z" fill="url(#petalGrad)" opacity="0.95" />
+    <!-- Right petal -->
+    <path d="M256 320 C302 320 362 270 368 210 C332 190 282 240 256 320 Z" fill="url(#petalGrad)" opacity="0.95" />
+    <!-- Center base droplet -->
+    <path d="M256 220 C236 260 236 300 256 330 C276 300 276 260 256 220 Z" fill="#C9B8DC" />
+  </g>
+
+  <!-- Golden Sparkle Crown -->
+  <path d="M256 82 L262 98 L278 104 L262 110 L256 126 L250 110 L234 104 L250 98 Z" fill="#C8A45D" />
+
+  <!-- Korean Flow Bottom Inscription -->
+  <text x="256" y="415" font-family="'Manrope', -apple-system, sans-serif" font-size="34" font-weight="700" letter-spacing="4" fill="#FFFFFF" text-anchor="middle">KOREAN FLOW</text>
+  <text x="256" y="445" font-family="'DM Sans', sans-serif" font-size="16" font-weight="600" letter-spacing="6" fill="#EDE7F3" opacity="0.85" text-anchor="middle">한국의 흐름</text>
+</svg>
