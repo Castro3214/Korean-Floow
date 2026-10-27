@@ -21,6 +21,8 @@ import { renderProfileView } from './views/ProfileView.js';
 import { renderLibraryView } from './views/LibraryView.js';
 import { renderOnboardingView } from './views/OnboardingView.js';
 import { getAchievementById } from './data/achievementsData.js';
+import { getExerciseById } from './data/exercisesData.js';
+import { openVideoFullscreenOverlay, stopAllVideos } from './components/ExerciseVideoPlayer.js';
 
 let selectedCategoryFilter = 'all';
 
@@ -246,6 +248,7 @@ function bindEvents() {
       e.stopPropagation();
       const tab = elem.getAttribute('data-tab');
       if (tab) {
+        stopAllVideos();
         store.setActiveTab(tab);
         window.scrollTo({ top: 0, behavior: 'smooth' });
         const content = document.getElementById('main-content');
@@ -260,6 +263,7 @@ function bindEvents() {
       e.stopPropagation();
       const day = parseInt(elem.getAttribute('data-day'), 10);
       if (day) {
+        stopAllVideos();
         store.openPracticeModal(day);
       }
     });
@@ -271,14 +275,21 @@ function bindEvents() {
   const practiceBackdrop = document.getElementById('flow-player-modal-backdrop');
 
   if (practiceCloseBtn) {
-    practiceCloseBtn.addEventListener('click', () => store.closePracticeModal());
+    practiceCloseBtn.addEventListener('click', () => {
+      stopAllVideos();
+      store.closePracticeModal();
+    });
   }
   if (practiceReturnBtn) {
-    practiceReturnBtn.addEventListener('click', () => store.closePracticeModal());
+    practiceReturnBtn.addEventListener('click', () => {
+      stopAllVideos();
+      store.closePracticeModal();
+    });
   }
   if (practiceBackdrop) {
     practiceBackdrop.addEventListener('click', (e) => {
       if (e.target === practiceBackdrop) {
+        stopAllVideos();
         store.closePracticeModal();
       }
     });
@@ -288,6 +299,7 @@ function bindEvents() {
   document.querySelectorAll('[data-action="open-exercise"]').forEach(elem => {
     elem.addEventListener('click', (e) => {
       e.stopPropagation();
+      stopAllVideos();
       const exerciseId = elem.getAttribute('data-exercise-id');
       if (exerciseId) {
         store.openExercise(exerciseId);
@@ -295,25 +307,44 @@ function bindEvents() {
     });
   });
 
-  // 5. Fechamento do Modal de Exercício (Retorno para a Prática)
+  // 4b. Disparo de Visualização em Tela Cheia do Vídeo
+  document.querySelectorAll('[data-action="watch-exercise-fullscreen"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const exerciseId = btn.getAttribute('data-exercise-id');
+      if (exerciseId) {
+        const exercise = getExerciseById(exerciseId);
+        if (exercise) {
+          openVideoFullscreenOverlay(exercise);
+        }
+      }
+    });
+  });
+
+  // 5. Fechamento do Modal de Exercício (Retorno para a Prática e pausa do player)
   const backToPracticeBtn = document.getElementById('btn-back-to-practice');
   const exerciseCloseBtn = document.getElementById('exercise-close-btn');
   const returnToSeqBottomBtn = document.getElementById('btn-return-to-sequence-bottom');
   const exerciseBackdrop = document.getElementById('exercise-detail-modal-backdrop');
 
+  const handleCloseExercise = () => {
+    stopAllVideos();
+    store.closeExercise();
+  };
+
   if (backToPracticeBtn) {
-    backToPracticeBtn.addEventListener('click', () => store.closeExercise());
+    backToPracticeBtn.addEventListener('click', handleCloseExercise);
   }
   if (exerciseCloseBtn) {
-    exerciseCloseBtn.addEventListener('click', () => store.closeExercise());
+    exerciseCloseBtn.addEventListener('click', handleCloseExercise);
   }
   if (returnToSeqBottomBtn) {
-    returnToSeqBottomBtn.addEventListener('click', () => store.closeExercise());
+    returnToSeqBottomBtn.addEventListener('click', handleCloseExercise);
   }
   if (exerciseBackdrop) {
     exerciseBackdrop.addEventListener('click', (e) => {
       if (e.target === exerciseBackdrop) {
-        store.closeExercise();
+        handleCloseExercise();
       }
     });
   }

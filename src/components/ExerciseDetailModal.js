@@ -14,6 +14,7 @@ import { renderButton } from './Button.js';
 import { getExerciseById } from '../data/exercisesData.js';
 import { JOURNEY_DAYS } from '../data/journeyData.js';
 import { store } from '../state/store.js';
+import { renderVideoSection } from './ExerciseVideoPlayer.js';
 
 export function renderExerciseDetailModal(exerciseId, isCompleted = false) {
   if (!exerciseId) return '';
@@ -34,7 +35,7 @@ export function renderExerciseDetailModal(exerciseId, isCompleted = false) {
     }
   }
 
-  const youtubeEmbedHtml = getYouTubeEmbedHtml(foundExercise.youtubeUrl, foundExercise.title);
+  const videoSectionHtml = renderVideoSection(foundExercise);
   const illustrationHtml = getIllustrationHtml(foundExercise.imageUrl, foundExercise.title);
 
   return `
@@ -152,19 +153,8 @@ export function renderExerciseDetailModal(exerciseId, isCompleted = false) {
           </div>
         </div>
 
-        <!-- 1. ÁREA DE VÍDEO (YOUTUBE EMBED OU PLACEHOLDER ELEGANTE) -->
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 11px; font-weight: 700; color: var(--kf-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
-              VÍDEO DEMONSTRATIVO
-            </span>
-            <span style="font-size: 11px; color: var(--kf-lilac-dark); font-weight: 600;">
-              Método Korean Flow
-            </span>
-          </div>
-
-          ${youtubeEmbedHtml}
-        </div>
+        <!-- 1. ÁREA DE VÍDEO DEMONSTRATIVO (EXERCISE VIDEO PLAYER) -->
+        ${videoSectionHtml}
 
         <!-- 2. ÁREA DE IMAGEM / ILUSTRAÇÃO DEMONSTRATIVA DE ALINHAMENTO -->
         <div style="display: flex; flex-direction: column; gap: 6px;">
